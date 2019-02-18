@@ -19,6 +19,6 @@ app.use('/graphql', express_graphql({
   graphiql: true
 }));
 
-app.listen(3000, () => {
+app.listen(3000 () => {
   console.log('express graphql server now running on localhost:3000/graphql')
 })
