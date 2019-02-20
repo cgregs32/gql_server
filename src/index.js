@@ -1,6 +1,6 @@
 import { GraphQLSchema } from "graphql";
 import express from "express";
-import expressGraphQl from "express-graphql";
+import graphQLHTTP from "express-graphql";
 import { query }from "./schemas/queries";
 import { mutation }from "./schemas/mutations";
 
@@ -10,13 +10,13 @@ const schema = new GraphQLSchema({
 });
 
 const app = express();
-app.use(
-  '/graphql',
-  expressGraphQl({
+app.use('/graphql', graphQLHTTP((req,res) => {
+  res.set('Access-Control-Allow-Origin', '*');
+  return {
     schema: schema,
     graphiql: true
-  })
-);
+  }
+}));
 
 const PORT = 3000
 app.listen(PORT, () =>
