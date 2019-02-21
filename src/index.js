@@ -1,5 +1,6 @@
-import { GraphQLSchema } from "graphql";
 import express from "express";
+import cors from "cors";
+import { GraphQLSchema } from "graphql";
 import graphQLHTTP from "express-graphql";
 import { query }from "./schemas/queries";
 import { mutation }from "./schemas/mutations";
@@ -10,8 +11,9 @@ const schema = new GraphQLSchema({
 });
 
 const app = express();
-app.use('/graphql', graphQLHTTP((req,res) => {
-  res.set('Access-Control-Allow-Origin', '*');
+app.use(cors())
+
+app.use('/graphql', graphQLHTTP((req, res) => {
   return {
     schema: schema,
     graphiql: true
