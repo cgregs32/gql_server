@@ -43,6 +43,16 @@ const RootQuery = new GraphQLObjectType({
           .then(res => res[0])
           .catch(err => err);
       }
+    },
+    users: {
+      type: new GraphQLList(UserType),
+      resolve(parent, args) {
+        const query = `SELECT * FROM users`;
+        return db
+          .multi(query)
+          .then(res => res[0])
+          .catch(err => err);
+      }
     }
   }
 });
