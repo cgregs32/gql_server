@@ -1,11 +1,13 @@
 import { db } from "../pgAdaptor";
-import { GraphQLObjectType, GraphQLID } from "graphql";
-import { UserType, PostType } from "./types";
+import { GraphQLObjectType, GraphQLID, GraphQLList } from "graphql";
+import { UserType, PostType, AllPosts } from "./types";
 
 const RootQuery = new GraphQLObjectType({
+  // entry point into the data
   name: "RootQueryType",
   type: "Query",
   fields: {
+    //this is the name we querry to
     post: {
       type: PostType,
       args: { id: { type: GraphQLID } },
@@ -17,7 +19,7 @@ const RootQuery = new GraphQLObjectType({
           .one(query, values)
           .then(res => res)
           .catch(err => err);
-      }
+      },
     },
     user: {
       type: UserType,
@@ -29,6 +31,16 @@ const RootQuery = new GraphQLObjectType({
         return db
           .one(query, values)
           .then(res => res)
+          .catch(err => err);
+      }
+    },
+    posts: {
+      type: new GraphQLList(PostType),
+      resolve(parentValue, args) {
+        const query = `SELECT * FROM posts`;
+        return db
+          .multi(query)
+          .then(res => res[0])
           .catch(err => err);
       }
     }

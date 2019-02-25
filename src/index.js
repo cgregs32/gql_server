@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import { GraphQLSchema } from "graphql";
 import graphQLHTTP from "express-graphql";
-import { query }from "./schemas/queries";
+import { query } from "./schemas/queries";
 import { mutation }from "./schemas/mutations";
 
 const schema = new GraphQLSchema({
@@ -13,7 +13,7 @@ const schema = new GraphQLSchema({
 const app = express();
 app.use(cors())
 
-app.use('/graphql', graphQLHTTP((req, res) => {
+app.use('/', graphQLHTTP((req, res) => {
   return {
     schema: schema,
     graphiql: true
