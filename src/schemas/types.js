@@ -1,6 +1,7 @@
 import { 
   GraphQLObjectType, 
   GraphQLString,
+  GraphQLList,
 } from "graphql";
 import { db } from "../pgAdaptor";
 
@@ -12,7 +13,18 @@ const UserType = new GraphQLObjectType({
     username: { type: GraphQLString },
     email: { type: GraphQLString },
     joined: { type: GraphQLString },
-    last_logged_in: { type: GraphQLString }
+    last_logged_in: { type: GraphQLString },
+    posts: {
+      type: new GraphQLList(PostType),
+      resolve(parent, args) {
+      const query = `SELECT * FROM posts WHERE creator_id=$1`;
+      const values = [parent.id];
+      return db
+        .multi(query, values)
+        .then(res => res[0])
+        .catch(err => err);
+      }
+    }
   })
 });
 
